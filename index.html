@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>SVG Editor</title>
+<link rel="stylesheet" type = "text/css" href="svgstyle.css">
+
+
+<script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded",app)
+
+function app()
+{
+      //1.Model
+const svg = document.querySelector("#editor")
+selectierectangle = document.querySelector("#rectangle");
+let moving=false;
+elemente = document.querySelector("#elemente");
+let mx=0, my=0, x1=0, y1=0;
+let selected = null;
+
+
+    //2.Desenare
+
+function desenare()
+{
+    if(moving)
+    {
+    selectierectangle.style.display="block"
+    selectierectangle.setAttributeNS(null,"x",Math.min(x1,mx));  //efectul coordonatelor mouse-ului la setarea atributelor pentru obiect -> echivalentul cu selectie.x = valoare
+    selectierectangle.setAttributeNS(null,"y",Math.min(y1,my));
+    selectierectangle.setAttributeNS(null,"width",Math.abs(mx-x1)); 
+    selectierectangle.setAttributeNS(null,"height",Math.abs(my-y1));
+    }
+
+    else{
+        selectierectangle.style.display="none";   //nu afisam nimic daca nu este mousedown
+
+        }
+
+    requestAnimationFrame(desenare);
+}
+desenare();
+
+svg.addEventListener('mousemove', e =>
+{
+    mx=e.clientX -svg.getBoundingClientRect().left;
+    my=e.clientY -svg.getBoundingClientRect().top;
+})
+
+svg.addEventListener("mousedown", e => {
+
+    if(e.button !== 0)
+    {
+        return;
+    }
+
+    moving=true;
+    x1=mx;
+    y1=my;
+})
+
+svg.addEventListener("mouseup" , e =>{
+
+    if(e.button!==0)
+    {
+        return;
+    }
+
+    moving=false;
+
+    let rectangle = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    rectangle.setAttributeNS(null,"x",Math.min(x1,mx));  
+    rectangle.setAttributeNS(null,"y",Math.min(y1,my));
+    rectangle.setAttributeNS(null,"width",Math.abs(mx-x1)); 
+    rectangle.setAttributeNS(null,"height",Math.abs(my-y1));
+    elemente.append(rectangle);
+
+    
+
+    rectangle.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        console.log(e.target);
+
+        selected=e.target;
+
+    })
+
+})
+
+document.addEventListener("keydown", e => {
+
+    if(e.key === "d" && selected !==null)
+    {
+        
+        selected.remove();
+        selected=null;
+    }
+})
+
+}
+</script>
+</head>
+
+<body>
+
+
+<h1>Editor SVG
+    <button class = "rectangle"></button>
+    <button class = "circle"></button>
+    <button class = "line" style="background-image: url(line.png)"></button>
+</h1>
+
+
+<svg id="editor">
+
+<g id="elemente">
+
+</g>
+
+    <rect id="rectangle" x="200" y="100" width="300" height="200"></rect>
+</svg>
+
+</body>
+
+
+</html>
