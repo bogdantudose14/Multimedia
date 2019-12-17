@@ -14,6 +14,7 @@ function app()
 {
       //1.Model
 const svg = document.querySelector("#editor")
+const header=document.querySelector("#header1")
 selectierectangle = document.querySelector("#rectangle");
 selectiecircle = document.querySelector("#circle");
 selectieline = document.querySelector("#line");
@@ -118,6 +119,7 @@ svg.addEventListener('mousemove', e =>
 
 svg.addEventListener("mousedown", e => {
 
+   
 
     if(e.button !== 0)
     {
@@ -218,7 +220,198 @@ document.addEventListener("keydown", e => {
     {
         switch(e.keyCode)
         {   case(37): 
-                console.log("adevarat!")
+                //console.log("left!")
+                switch(selected.valoare)
+                {
+                    case("rect"):
+                        //console.log("rectangle")
+                        x1=selected.tip.getAttributeNS(null,"x")
+                        
+                        if(x1>=10)
+                        {x1=x1-10;}
+                        
+                         else 
+                         {x1=0;}
+
+                         selected.tip.setAttributeNS(null,"x",x1);   
+                        
+                        break;
+
+                    case("circle"):
+                     x1=selected.tip.getAttributeNS(null,"cx")
+                     if(x1>=10)
+                        {x1=x1-10;}
+                        selected.tip.setAttributeNS(null,"cx",x1);   
+                        
+                        break;
+
+
+                    case("line"):
+                    
+                    x1=selected.tip.getAttributeNS(null,"x1")
+                    mx=selected.tip.getAttributeNS(null,"x2")
+                    if(x1>=10)
+                        {x1=x1-10;}
+                    
+                    
+                    if(mx>=10 && x1>=10)
+                        mx=mx-10;
+                    
+                    selected.tip.setAttributeNS(null,"x1",x1);
+                    selected.tip.setAttributeNS(null,"x2",mx);
+                        
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                break;
+            case(38): 
+                //console.log("up!")
+            switch(selected.valoare)
+                {
+                    case("rect"):
+                        
+                        y1=selected.tip.getAttributeNS(null,"y")
+                        if(y1>=10)
+                        {y1=y1-10;}
+                        
+                         else 
+                         {y1=0;}
+
+                         selected.tip.setAttributeNS(null,"y",y1);   
+                        
+                        break;
+
+                    case("circle"):
+                    y1=selected.tip.getAttributeNS(null,"cy")
+                     if(y1>=10)
+                        {y1=y1-10;}
+                        selected.tip.setAttributeNS(null,"cy",y1);   
+                        
+                        break;
+
+
+                    case("line"):
+                    //console.log(x1," ", mx);
+                    y1=selected.tip.getAttributeNS(null,"y1")
+                    my=selected.tip.getAttributeNS(null,"y2")
+                    
+                        
+                    
+                    
+                    if(my>=10 && y1>=10)
+                    {y1=y1-10;
+                        my=my-10;}
+
+                    else 
+                    if (my<10) {y1=y1-(my);my=0;}
+                    if(y1<10) {my=my-y1; y1=0;}
+                    
+                    selected.tip.setAttributeNS(null,"y1",y1);
+                    selected.tip.setAttributeNS(null,"y2",my);
+                        
+                        break;
+
+                    default:
+
+                        break;
+                }
+                
+                break;   
+            case(39): 
+                //console.log("right!")
+                svgwidth= svg.getBoundingClientRect().width
+
+                switch(selected.valoare)
+                {
+                    case("rect"):
+                        //console.log("rectangle")
+                        x1=parseInt(selected.tip.getAttributeNS(null,"x"))
+                        width=selected.tip.getAttributeNS(null,"width")
+                        
+                        if(x1<svgwidth-width-5)
+                            { x1+=10;}
+
+                         selected.tip.setAttributeNS(null,"x",x1);   
+                        
+                        break;
+
+                    case("circle"):
+                     width=selected.tip.getAttributeNS(null,"width")
+                     x1=parseInt(selected.tip.getAttributeNS(null,"cx"))
+                     if(x1<=svgwidth-width)
+                        {x1=x1+10;}
+                        selected.tip.setAttributeNS(null,"cx",x1);   
+                        
+                        break;
+
+
+                    case("line"):
+                    
+                    x1=parseInt(selected.tip.getAttributeNS(null,"x1"))
+                    mx=parseInt(selected.tip.getAttributeNS(null,"x2"))
+                    length=parseInt(Math.abs(x1-mx))
+                    console.log(length)
+                    if(x1<=svgwidth-length-5)
+                        {x1=x1+10;
+                        mx+=10;}
+                    selected.tip.setAttributeNS(null,"x1",x1);
+                    selected.tip.setAttributeNS(null,"x2",mx);
+                        
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                break;
+            case(40): 
+                //console.log("down!")
+                svgheight= svg.getBoundingClientRect().height
+                headerheight=header.getBoundingClientRect().height
+                switch(selected.valoare)
+                {
+                    case("rect"):
+                        height=parseInt(selected.tip.getAttributeNS(null,"height"))
+                        y1=parseInt(selected.tip.getAttributeNS(null,"y"))
+
+                        if(y1<=svgheight-height-headerheight-5)
+                        {y1=y1+10;}
+
+                         selected.tip.setAttributeNS(null,"y",y1);   
+                        
+                        break;
+
+                    case("circle"):
+                    y1=parseInt(selected.tip.getAttributeNS(null,"cy"))
+                     if(y1<=svgheight-headerheight)
+                        {y1=y1+10;}
+                        selected.tip.setAttributeNS(null,"cy",y1);   
+                        
+                        break;
+
+
+                    case("line"):
+                    
+                    y1=parseInt(selected.tip.getAttributeNS(null,"y1"))
+                    my=parseInt(selected.tip.getAttributeNS(null,"y2"))
+                    
+                    if(Math.max(y1,my)<=svgheight-headerheight-5)
+                    {y1=y1+10;
+                    my=my+10;}
+                    selected.tip.setAttributeNS(null,"y1",y1);
+                    selected.tip.setAttributeNS(null,"y2",my);
+                        
+                        break;
+
+                    default:
+
+                        break;
+                }
                 break;
             default:
             console.log(e.keyCode)
@@ -240,7 +433,7 @@ document.addEventListener("keydown", e => {
 <body>
 
 
-<h1>Editor SVG
+<h1 id="header1">Editor SVG
     <button id="rectanglebtn" class = "rectangle"></button>
     <button id="circlebtn" class = "circle"></button>
     <button id="linebtn" class = "line" style="background-image: url(line.png)"></button>
