@@ -15,10 +15,47 @@ function app()
       //1.Model
 const svg = document.querySelector("#editor")
 selectierectangle = document.querySelector("#rectangle");
+selectiecircle = document.querySelector("#circle");
+selectieline = document.querySelector("#line");
+var value = "rectangle";
+
 let moving=false;
 elemente = document.querySelector("#elemente");
 let mx=0, my=0, x1=0, y1=0;
-let selected = null;
+let selected = {valoare:value, tip: null};
+var btnrectangle = document.querySelector("#rectanglebtn");
+var btncircle = document.querySelector("#circlebtn");
+var btnline = document.querySelector("#linebtn");
+
+
+btnrectangle.addEventListener("click", handleclickrectangle)
+btncircle.addEventListener("click", handleclickcircle)
+btnline.addEventListener("click", handleclickline)
+
+
+function handleclickrectangle()
+{
+    //console.log("Button for rectangle drawing pressed");
+    value = "rectangle";
+  
+}
+function handleclickcircle()
+{
+   // console.log("Button for circle drawing pressed");
+   value="circle";
+   
+}
+function handleclickline()
+{
+   // console.log("Button for line drawing pressed");
+   value="line"
+}
+
+svg.addEventListener("contextmenu" , e=>
+{
+
+    e.preventDefault();
+})
 
 
     //2.Desenare
@@ -27,15 +64,45 @@ function desenare()
 {
     if(moving)
     {
+        if(value==="rectangle")
+        {
     selectierectangle.style.display="block"
     selectierectangle.setAttributeNS(null,"x",Math.min(x1,mx));  //efectul coordonatelor mouse-ului la setarea atributelor pentru obiect -> echivalentul cu selectie.x = valoare
     selectierectangle.setAttributeNS(null,"y",Math.min(y1,my));
     selectierectangle.setAttributeNS(null,"width",Math.abs(mx-x1)); 
     selectierectangle.setAttributeNS(null,"height",Math.abs(my-y1));
+        }
+
+        else if(value === "circle")
+        {
+            
+            selectiecircle.style.display="block";
+            // selectiecircle.setAttributeNS(null,"cx",Math.min(x1,mx));
+            // selectiecircle.setAttributeNS(null,"cy",Math.min(y1,mx));
+            // selectiecircle.setAttributeNS(null,"r",Math.abs(mx-x1));
+            selectiecircle.setAttributeNS(null,"cx",x1);
+            selectiecircle.setAttributeNS(null,"cy",y1);
+            selectiecircle.setAttributeNS(null,"r",Math.max(Math.abs(mx-x1),Math.abs(my-y1)));
+            
+
+        }
+
+        else if(value ==="line")
+        {
+
+                //console.log("line selected")
+            selectieline.style.display="block"
+            selectieline.setAttributeNS(null,"x1",x1);
+            selectieline.setAttributeNS(null,"y1",y1);
+            selectieline.setAttributeNS(null,"x2",mx);
+            selectieline.setAttributeNS(null,"y2",my);
+        }
     }
 
     else{
         selectierectangle.style.display="none";   //nu afisam nimic daca nu este mousedown
+        selectiecircle.style.display="none"
+        selectieline.style.display="none"
 
         }
 
@@ -50,6 +117,7 @@ svg.addEventListener('mousemove', e =>
 })
 
 svg.addEventListener("mousedown", e => {
+
 
     if(e.button !== 0)
     {
@@ -68,8 +136,10 @@ svg.addEventListener("mouseup" , e =>{
         return;
     }
 
-    moving=false;
+    
 
+if(value === "rectangle")
+{
     let rectangle = document.createElementNS("http://www.w3.org/2000/svg","rect");
     rectangle.setAttributeNS(null,"x",Math.min(x1,mx));  
     rectangle.setAttributeNS(null,"y",Math.min(y1,my));
@@ -77,15 +147,61 @@ svg.addEventListener("mouseup" , e =>{
     rectangle.setAttributeNS(null,"height",Math.abs(my-y1));
     elemente.append(rectangle);
 
-    
-
     rectangle.addEventListener("contextmenu", e => {
         e.preventDefault();
-        console.log(e.target);
-
-        selected=e.target;
+        selected.tip=e.target;
+        selected.valoare=e.target.tagName
+        console.log(selected.tip);
+        console.log(selected.valoare)
 
     })
+
+   
+
+}
+
+else if (value === "circle")
+{
+    let circle=document.createElementNS("http://www.w3.org/2000/svg","circle")
+     
+     circle.setAttributeNS(null,"cx",x1);
+     circle.setAttributeNS(null,"cy",y1);
+    circle.setAttributeNS(null,"r",Math.max(Math.abs(mx-x1),Math.abs(my-y1)));
+    
+    elemente.append(circle);
+
+    circle.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        selected.tip=e.target;
+        selected.valoare=e.target.tagName
+        console.log(selected.tip);
+        console.log(selected.valoare)
+
+    })
+
+}
+
+else if (value ==="line")
+{
+
+    let line = document.createElementNS("http://www.w3.org/2000/svg","line")
+    line.style.display="block"
+    line.setAttributeNS(null,"x1",x1);
+    line.setAttributeNS(null,"y1",y1);
+    line.setAttributeNS(null,"x2",mx);
+    line.setAttributeNS(null,"y2",my);
+    elemente.append(line);
+
+    line.addEventListener("contextmenu", e => {
+        e.preventDefault();
+        selected.tip=e.target;
+        selected.valoare=e.target.tagName;
+        console.log(selected.tip);
+        console.log(selected.valoare)
+    })
+}
+
+moving=false;
 
 })
 
@@ -94,8 +210,26 @@ document.addEventListener("keydown", e => {
     if(e.key === "d" && selected !==null)
     {
         
-        selected.remove();
-        selected=null;
+        selected.tip.remove();
+        selected.tip=null;
+    }
+
+    if(selected.tip !=null)
+    {
+        switch(e.keyCode)
+        {   case(37): 
+                console.log("adevarat!")
+                break;
+            default:
+            console.log(e.keyCode)
+
+
+
+        }
+        
+            
+            
+        
     }
 })
 
@@ -107,9 +241,9 @@ document.addEventListener("keydown", e => {
 
 
 <h1>Editor SVG
-    <button class = "rectangle"></button>
-    <button class = "circle"></button>
-    <button class = "line" style="background-image: url(line.png)"></button>
+    <button id="rectanglebtn" class = "rectangle"></button>
+    <button id="circlebtn" class = "circle"></button>
+    <button id="linebtn" class = "line" style="background-image: url(line.png)"></button>
 </h1>
 
 
@@ -119,7 +253,9 @@ document.addEventListener("keydown", e => {
 
 </g>
 
-    <rect id="rectangle" x="200" y="100" width="300" height="200"></rect>
+  <rect id="rectangle" x="200" y="100" width="300" height="200"></rect>
+  <circle id="circle"  cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+  <line id="line" x1="50" , y1="50", x2="100", y2="100" ></line>
 </svg>
 
 </body>

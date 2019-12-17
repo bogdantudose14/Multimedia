@@ -43,6 +43,26 @@ svg rect {
         
 }
 
+svg circle {
+
+    stroke:navy;
+    stroke-opacity: 0.5;
+    stroke-width: 2px;
+    fill:gray;
+    fill-opacity: 0.3;
+    
+}
+
+svg line {
+
+    stroke:navy;
+    stroke-opacity: 0.5;
+    stroke-width: 2px;
+    fill:gray;
+    fill-opacity: 0.3;
+    
+}
+
 .rectangle:hover {
         background:#caa612;
         letter-spacing: 1px;
@@ -124,3 +144,24 @@ svg #rectangle
     
     
     }
+
+svg #circle
+{
+    stroke: darkblue;
+    stroke-opacity: 0.5;
+    stroke-width: 3px;
+    fill:transparent;
+    stroke-dasharray: 3 3;
+    
+}
+
+svg #line
+{
+    stroke: darkblue;
+    stroke-opacity: 0.5;
+    stroke-width: 3px;
+    fill:transparent;
+    stroke-dasharray: 3 3;
+    
+}
+
