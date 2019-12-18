@@ -17,6 +17,34 @@ h1 {
     display: inline-block;
 }
 
+.colorpick
+{
+    display: inline-block;
+    float: inline-start;
+    font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+    margin-left: 35px; 
+}
+
+.red
+{
+    background-color: maroon;
+    color: #fff;
+  
+}
+
+.green
+{
+    background-color: #082f14;
+    color: #fff;
+  
+}
+
+.darkblue
+{
+    background-color: #003366;
+    color: #fff;
+    
+}
 
 .rectangle{
     color: #fff !important;
@@ -120,6 +148,22 @@ svg line {
                 box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
                 transition: all 0.4s ease 0s;
                 }
+
+/* .colorpick
+            {
+                background: #fff ;
+                font-size: medium;
+                color:#000;
+                padding-top: 4px;
+                margin-left: 35px;
+                margin-bottom: 10px;
+                margin-top: 20px;
+                display: inline-block;
+                border: midnightblue;
+                
+            } */
+
+
 .muteclass, .remove {
 
     color: #fff !important;
@@ -148,8 +192,6 @@ svg line {
 
 
 }
-
-
 
 
 
@@ -193,4 +235,7 @@ svg #line
     stroke-dasharray: 3 3;
     
 }
+
+
+  
 
