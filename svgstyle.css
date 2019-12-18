@@ -120,6 +120,35 @@ svg line {
                 box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
                 transition: all 0.4s ease 0s;
                 }
+.muteclass, .remove {
+
+    color: #fff !important;
+                text-transform: uppercase;
+                text-decoration: none;
+                background: #003366 ;
+                padding: 15px;
+                background-color: transparent;
+                display: inline-block;
+                border: none;
+                transition: all 0.4s ease 0s;
+                float: inline-start;
+                margin-left: 35px;
+                margin-bottom: 10px;
+
+}
+
+.muteclass:hover , .remove:hover{
+
+    background:#caa612;
+    letter-spacing: 1px;
+    -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+    box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+    transition: all 0.4s ease 0s;
+
+
+}
+
 
 
 

@@ -19,6 +19,10 @@ selectierectangle = document.querySelector("#rectangle");
 selectiecircle = document.querySelector("#circle");
 selectieline = document.querySelector("#line");
 var value = "rectangle";
+const audio = document.createElement('audio');
+audio.src="woosh.mp3"
+var mute=false;
+
 
 let moving=false;
 elemente = document.querySelector("#elemente");
@@ -27,11 +31,16 @@ let selected = {valoare:value, tip: null};
 var btnrectangle = document.querySelector("#rectanglebtn");
 var btncircle = document.querySelector("#circlebtn");
 var btnline = document.querySelector("#linebtn");
+var btnmute=document.querySelector("#mutebtn");
+var removebtn=document.querySelector("#removebtn");
 
 
 btnrectangle.addEventListener("click", handleclickrectangle)
 btncircle.addEventListener("click", handleclickcircle)
 btnline.addEventListener("click", handleclickline)
+btnmute.addEventListener("click",handleclickmute)
+removebtn.addEventListener("click",handleclickremove)
+
 
 
 function handleclickrectangle()
@@ -52,6 +61,27 @@ function handleclickline()
    value="line"
 }
 
+function handleclickmute()
+{
+    if(mute===false)
+       { mute=true;
+        btnmute.style="background-image: url(mute.png)"}
+    else
+        {mute=false
+        btnmute.style="background-image: url(soundon.png)"
+        }
+}
+
+function handleclickremove()
+{
+    // while (svg.lastChild) {
+    // svg.removeChild(svg.lastChild);
+
+    elemente.remove()
+}
+    
+}
+
 svg.addEventListener("contextmenu" , e=>
 {
 
@@ -67,31 +97,23 @@ function desenare()
     {
         if(value==="rectangle")
         {
-    selectierectangle.style.display="block"
-    selectierectangle.setAttributeNS(null,"x",Math.min(x1,mx));  //efectul coordonatelor mouse-ului la setarea atributelor pentru obiect -> echivalentul cu selectie.x = valoare
-    selectierectangle.setAttributeNS(null,"y",Math.min(y1,my));
-    selectierectangle.setAttributeNS(null,"width",Math.abs(mx-x1)); 
-    selectierectangle.setAttributeNS(null,"height",Math.abs(my-y1));
+        selectierectangle.style.display="block"
+        selectierectangle.setAttributeNS(null,"x",Math.min(x1,mx));  //efectul coordonatelor mouse-ului la setarea atributelor pentru obiect -> echivalentul cu selectie.x = valoare
+        selectierectangle.setAttributeNS(null,"y",Math.min(y1,my));
+        selectierectangle.setAttributeNS(null,"width",Math.abs(mx-x1)); 
+        selectierectangle.setAttributeNS(null,"height",Math.abs(my-y1));
         }
 
         else if(value === "circle")
         {
-            
             selectiecircle.style.display="block";
-            // selectiecircle.setAttributeNS(null,"cx",Math.min(x1,mx));
-            // selectiecircle.setAttributeNS(null,"cy",Math.min(y1,mx));
-            // selectiecircle.setAttributeNS(null,"r",Math.abs(mx-x1));
             selectiecircle.setAttributeNS(null,"cx",x1);
             selectiecircle.setAttributeNS(null,"cy",y1);
             selectiecircle.setAttributeNS(null,"r",Math.max(Math.abs(mx-x1),Math.abs(my-y1)));
-            
-
         }
 
         else if(value ==="line")
         {
-
-                //console.log("line selected")
             selectieline.style.display="block"
             selectieline.setAttributeNS(null,"x1",x1);
             selectieline.setAttributeNS(null,"y1",y1);
@@ -101,10 +123,10 @@ function desenare()
     }
 
     else{
+
         selectierectangle.style.display="none";   //nu afisam nimic daca nu este mousedown
         selectiecircle.style.display="none"
         selectieline.style.display="none"
-
         }
 
     requestAnimationFrame(desenare);
@@ -120,19 +142,26 @@ svg.addEventListener('mousemove', e =>
 svg.addEventListener("mousedown", e => {
 
    
-
+    audio.src="woosh.mp3"
+    
     if(e.button !== 0)
     {
         return;
     }
-
     moving=true;
     x1=mx;
     y1=my;
+
+    
 })
 
 svg.addEventListener("mouseup" , e =>{
 
+if(mute===false && e.button===0)
+{
+    audio.load();
+    audio.play()
+}
     if(e.button!==0)
     {
         return;
@@ -153,9 +182,7 @@ if(value === "rectangle")
         e.preventDefault();
         selected.tip=e.target;
         selected.valoare=e.target.tagName
-        console.log(selected.tip);
-        console.log(selected.valoare)
-
+        
     })
 
    
@@ -176,8 +203,7 @@ else if (value === "circle")
         e.preventDefault();
         selected.tip=e.target;
         selected.valoare=e.target.tagName
-        console.log(selected.tip);
-        console.log(selected.valoare)
+
 
     })
 
@@ -198,8 +224,7 @@ else if (value ==="line")
         e.preventDefault();
         selected.tip=e.target;
         selected.valoare=e.target.tagName;
-        console.log(selected.tip);
-        console.log(selected.valoare)
+
     })
 }
 
@@ -208,10 +233,20 @@ moving=false;
 })
 
 document.addEventListener("keydown", e => {
-
+    
+    audio.src="movement.mp3"
+    if(mute===false)
+    {audio.load()
+    audio.play()}
+    
     if(e.key === "d" && selected !==null)
     {
-        
+        if(mute===false)
+        {
+        audio.src="delete.mp3"
+        audio.load()
+        audio.play()
+        }
         selected.tip.remove();
         selected.tip=null;
     }
@@ -299,9 +334,7 @@ document.addEventListener("keydown", e => {
                     y1=selected.tip.getAttributeNS(null,"y1")
                     my=selected.tip.getAttributeNS(null,"y2")
                     
-                        
-                    
-                    
+                                           
                     if(my>=10 && y1>=10)
                     {y1=y1-10;
                         my=my-10;}
@@ -348,7 +381,6 @@ document.addEventListener("keydown", e => {
                         
                         break;
 
-
                     case("line"):
                     
                     x1=parseInt(selected.tip.getAttributeNS(null,"x1"))
@@ -387,13 +419,13 @@ document.addEventListener("keydown", e => {
                         break;
 
                     case("circle"):
+
                     y1=parseInt(selected.tip.getAttributeNS(null,"cy"))
                      if(y1<=svgheight-headerheight)
                         {y1=y1+10;}
                         selected.tip.setAttributeNS(null,"cy",y1);   
                         
                         break;
-
 
                     case("line"):
                     
@@ -415,14 +447,7 @@ document.addEventListener("keydown", e => {
                 break;
             default:
             console.log(e.keyCode)
-
-
-
         }
-        
-            
-            
-        
     }
 })
 
@@ -437,6 +462,9 @@ document.addEventListener("keydown", e => {
     <button id="rectanglebtn" class = "rectangle"></button>
     <button id="circlebtn" class = "circle"></button>
     <button id="linebtn" class = "line" style="background-image: url(line.png)"></button>
+    <button id="mutebtn" class="muteclass" style="background-image: url(soundon.png)"></button>
+    <button id="removebtn" class = "remove" style="background-image: url(trash.png);"></button>
+
 </h1>
 
 
@@ -444,11 +472,13 @@ document.addEventListener("keydown", e => {
 
 <g id="elemente">
 
-</g>
+
 
   <rect id="rectangle" x="200" y="100" width="300" height="200"></rect>
   <circle id="circle"  cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
   <line id="line" x1="50" , y1="50", x2="100", y2="100" ></line>
+
+</g>
 </svg>
 
 </body>
