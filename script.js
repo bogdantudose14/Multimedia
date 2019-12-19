@@ -14,6 +14,7 @@ var value = "rectangle";
 const audio = document.createElement('audio');
 audio.src="woosh.mp3"
 var mute=false;
+var select = document.getElementById("colorpick")
 
 
 let moving=false;
@@ -71,6 +72,11 @@ function handleclickremove()
      }
     //elemente.remove()
 }
+
+function colorpick()
+{
+    var x = select.value
+}
     
 
 
@@ -85,6 +91,7 @@ svg.addEventListener("contextmenu" , e=>
 
 function desenare()
 {
+    
     if(moving)
     {
         if(value==="rectangle")
@@ -133,7 +140,7 @@ svg.addEventListener('mousemove', e =>
 
 svg.addEventListener("mousedown", e => {
 
-   
+    colorpick()
     audio.src="woosh.mp3"
     
     if(e.button !== 0)
@@ -164,6 +171,7 @@ if(mute===false && e.button===0)
 if(value === "rectangle")
 {
     let rectangle = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    rectangle.style.fill=select.value
     rectangle.setAttributeNS(null,"x",Math.min(x1,mx));  
     rectangle.setAttributeNS(null,"y",Math.min(y1,my));
     rectangle.setAttributeNS(null,"width",Math.abs(mx-x1)); 
@@ -184,7 +192,7 @@ if(value === "rectangle")
 else if (value === "circle")
 {
     let circle=document.createElementNS("http://www.w3.org/2000/svg","circle")
-     
+     circle.style.fill=select.value
      circle.setAttributeNS(null,"cx",x1);
      circle.setAttributeNS(null,"cy",y1);
     circle.setAttributeNS(null,"r",Math.max(Math.abs(mx-x1),Math.abs(my-y1)));

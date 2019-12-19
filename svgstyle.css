@@ -46,6 +46,20 @@ h1 {
     
 }
 
+.orange
+{
+    background-color: #ff7900;
+    color: #fff;
+    
+}
+
+.yellow
+{
+    background-color: #fedf00;
+    color: #fff;
+    
+}
+
 .rectangle{
     color: #fff !important;
     text-transform: uppercase;
